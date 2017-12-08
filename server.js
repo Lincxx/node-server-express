@@ -5,7 +5,11 @@ const hbs = require('express-handlebars');
 const app = express();
 
 //now we need to set a template engine for handle-bars
-app.engine('hbs', hbs({extname:'hbs'}));
+app.engine('hbs', hbs({
+    extname:'hbs', 
+    defaultLayout:'layout',
+    layoutsDir: __dirname+'/views/layouts'
+}));
 app.set('view engine', 'hbs');
 
 //MIDDLEWARES //Get all the stuff we need before the rest loads
@@ -71,10 +75,16 @@ app.get("/api/car", (req, res)=>{
 });
 
 app.get('/user', (req, res) => {
-
     res.render('user', {
+        title: 'User Profile',
         name: 'Jeremy',
-        lastname: 'Lincoln'
+        lastname: 'Lincoln', 
+        valid: true, 
+        pets:['dog', 'cat', 'bird'],
+        parents: [{
+            dad:'ric',
+            mom:'tracy'
+        }]
     });
 });
 
