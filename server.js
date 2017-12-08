@@ -1,12 +1,29 @@
 //all the config for the server
 const express = require('express');
+const hbs = require('express-handlebars');
 
 const app = express();
+
+//now we need to set a template engine for handle-bars
+app.engine('hbs', hbs({extname:'hbs'}));
+app.set('view engine', 'hbs');
+
+//MIDDLEWARES //Get all the stuff we need before the rest loads
+app.use('/css', express.static(__dirname + '/public/css'));
+
+app.use('/', (req, res, next)=>{
+    console.log('someone made a request from: ' + req.url);
+    res.cookie("cookieName", "cookieValue");
+    next(); //basically say move forward in the application
+});
 
 //ROUTES
 app.get('/', (req, res)=>{
     res.send(`
         <html>
+        <head>
+            <link type="text/css" rel="stylesheet" href="/css/style.css"
+        </head>
             <body>
                 <h1>Welcome, buddy</h1>
             </body>
@@ -51,7 +68,15 @@ app.get("/api/car", (req, res)=>{
         year
     })
 
-;})
+});
+
+app.get('/user', (req, res) => {
+
+    res.render('user', {
+        name: 'Jeremy',
+        lastname: 'Lincoln'
+    });
+});
 
 //SERVER
 const port = process.env.PORT || 3000
