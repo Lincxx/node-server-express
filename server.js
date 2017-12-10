@@ -1,8 +1,20 @@
 //all the config for the server
 const express = require('express');
 const hbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+
 
 const app = express();
+
+//body parser setup, what content tpye we are going to use
+//querystring
+const urlencodeParser = bodyParser.urlencoded({
+    extended:false
+});
+
+//body parser setup, what content tpye we are going to use
+//json
+const jsonParser = bodyParser.json();
 
 //now we need to set a template engine for handle-bars
 app.engine('hbs', hbs({
@@ -74,6 +86,8 @@ app.get("/api/car", (req, res)=>{
 
 });
 
+//RENDER FROM TEMPLATE
+//https://github.com/ericf/express-handlebars
 app.get('/user', (req, res) => {
     res.render('user', {
         title: 'User Profile',
@@ -87,6 +101,30 @@ app.get('/user', (req, res) => {
         }]
     });
 });
+
+app.get('/enteruser', (req, res)=> {
+    res.render('enteruser');
+});
+
+app.get('/enteruserjson', (req, res)=> {
+    res.render('enteruserjson');
+});
+
+///POST
+app.post('/enteruser', urlencodeParser, (req, res)=> {
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    console.log(firstname);
+    console.log(lastname);
+    
+});
+///POST JSON
+app.post('/enteruserjson', jsonParser, (req, res)=>{
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    console.log(firstname);
+    console.log(lastname);
+})
 
 //SERVER
 const port = process.env.PORT || 3000
